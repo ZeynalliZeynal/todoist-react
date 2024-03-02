@@ -13,6 +13,7 @@ import NotFound from '../pages/notFound'
 import Pricing from '../pages/pricing'
 import Login from '../pages/login'
 import Register from '../pages/register'
+import TodoApp from '../pages/todoApp'
 
 const routes = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const routes = createBrowserRouter([
       {
         path: 'inspirationHub',
         element: <InspirationHub />,
+      },
+      {
+        path: 'todoApp',
+        element: <TodoApp />,
       },
       {
         path: '*',

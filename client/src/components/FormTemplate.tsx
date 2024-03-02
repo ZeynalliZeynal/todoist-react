@@ -16,13 +16,13 @@ export default function FormTemplate({ type }: FormTemplateType) {
   }, [])
   return (
     <div className="p-6 flex flex-col gap-8 items-center">
-      <header>
-        <nav className="w-[940px] pb-8">
+      <header className="w-full">
+        <nav className="mx-auto max-w-[940px] w-full pb-8">
           <Logo />
         </nav>
       </header>
-      <main className="pt-8">
-        <div className="w-[940px]">
+      <main className="pt-8 w-full">
+        <div className="max-w-[940px] w-full mx-auto">
           <div className="flex justify-between">
             <div className="w-5/12">
               <div className="flex flex-col gap-4">

@@ -6,7 +6,8 @@ export default function Layout() {
   const location = useLocation()
   const shouldRenderHeader =
     !location.pathname.startsWith('/login') &&
-    !location.pathname.startsWith('/register')
+    !location.pathname.startsWith('/register') &&
+    !location.pathname.startsWith('/todoApp')
 
   return (
     <>
