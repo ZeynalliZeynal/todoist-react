@@ -8,11 +8,7 @@ type AddFormProps = {
   useremail: string | undefined
 }
 
-export default function AddForm({
-  todoList,
-  setTodoList,
-  useremail,
-}: AddFormProps) {
+export default function AddForm({ setTodoList, useremail }: AddFormProps) {
   const [taskName, setTaskName] = useState('')
   const [taskDesc, setTaskDesc] = useState('')
 
