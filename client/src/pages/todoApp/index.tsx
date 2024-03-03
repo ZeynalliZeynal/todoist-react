@@ -2,18 +2,25 @@ import AddedTodos from './addedTodos'
 import { useEffect, useState } from 'react'
 import AddForm from './addForm'
 import { TodoType } from './addedTodos'
+
+// * Audio part from gpt
 import CheckSound from '../../assets/audio/checked_sound.mp3'
+import { useLocation, useParams } from 'react-router-dom'
 
 export default function TodoApp() {
   const [todoList, setTodoList] = useState<TodoType[]>([])
   const completedTodoList = todoList.filter((todo) => todo.checked).length
   const [checkSoundEffect, setCheckSoundEffect] =
     useState<HTMLAudioElement | null>(null)
+  // * from chatgpt
+  const { useremail } = useParams()
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const todosParam = queryParams.get('todos')
 
   useEffect(() => {
     document.title = 'Today - Todoist'
     const audioElement = new Audio(CheckSound)
-    audioElement.load() // Load the audio file
 
     audioElement.addEventListener('canplaythrough', () => {
       setCheckSoundEffect(audioElement)
@@ -26,6 +33,11 @@ export default function TodoApp() {
       })
     }
   }, [])
+
+  useEffect(() => {
+    const todos = todosParam ? JSON.parse(decodeURIComponent(todosParam)) : []
+    setTodoList(todos)
+  }, [todosParam])
 
   function handleCheck(id: string) {
     if (checkSoundEffect) {
@@ -70,7 +82,11 @@ export default function TodoApp() {
               </>
             )}{' '}
             <AddedTodos todoList={todoList} onCheck={handleCheck} />
-            <AddForm todoList={todoList} setTodoList={setTodoList} />
+            <AddForm
+              todoList={todoList}
+              setTodoList={setTodoList}
+              useremail={useremail}
+            />
           </div>
         </section>
       </main>

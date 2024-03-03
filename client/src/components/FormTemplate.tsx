@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 type FormTemplateType = {
   type: 'signup' | 'login'
+  onLogin?: (isLogin: boolean) => void
 }
 
 export default function FormTemplate({ type }: FormTemplateType) {
@@ -13,7 +14,7 @@ export default function FormTemplate({ type }: FormTemplateType) {
       type === 'signup'
         ? 'Sign up for a free Todoist account'
         : 'Log in to Todoist'
-  }, [])
+  }, [type])
   return (
     <div className="p-6 flex flex-col gap-8 items-center">
       <header className="w-full">

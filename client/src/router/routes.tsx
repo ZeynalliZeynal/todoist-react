@@ -73,7 +73,7 @@ const routes = createBrowserRouter([
         element: <InspirationHub />,
       },
       {
-        path: 'todoApp',
+        path: 'todoApp/:useremail',
         element: <TodoApp />,
       },
       {

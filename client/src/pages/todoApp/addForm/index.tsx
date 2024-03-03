@@ -5,9 +5,14 @@ import { TodoType } from '../addedTodos'
 type AddFormProps = {
   todoList: TodoType[]
   setTodoList: (todoList: TodoType[]) => void
+  useremail: string | undefined
 }
 
-export default function AddForm({ todoList, setTodoList }: AddFormProps) {
+export default function AddForm({
+  todoList,
+  setTodoList,
+  useremail,
+}: AddFormProps) {
   const [taskName, setTaskName] = useState('')
   const [taskDesc, setTaskDesc] = useState('')
 
@@ -19,17 +24,71 @@ export default function AddForm({ todoList, setTodoList }: AddFormProps) {
     setTaskDesc(event.target.value)
   }
 
-  function handleSubmit() {
-    const newTask = {
-      id: crypto.randomUUID(),
-      name: taskName,
-      desc: taskDesc,
-      checked: false,
-    }
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    try {
+      e.preventDefault()
+      if (!taskName) return false
 
-    setTodoList([...todoList, newTask])
-    setTaskName('')
-    setTaskDesc('')
+      const newTask = {
+        id: crypto.randomUUID(),
+        name: taskName,
+        desc: taskDesc,
+        checked: false,
+      }
+
+      // Fetch the user by email
+      const userResponse = await fetch(
+        `http://localhost:3000/users?email=${useremail}`,
+      )
+
+      if (!userResponse.ok) {
+        console.error('Error fetching user data from API')
+        return
+      }
+
+      const users = await userResponse.json()
+      const foundUser = users[0]
+
+      // If the user is found, update the todos array
+      if (foundUser) {
+        const userId = foundUser.id
+
+        // Make API request to update user's todos array
+        const updateResponse = await fetch(
+          `http://localhost:3000/users/${userId}`,
+          {
+            method: 'PUT', // Use PUT for updating the entire user resource
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ...foundUser,
+              todos: [...foundUser.todos, newTask],
+            }),
+          },
+        )
+
+        if (updateResponse.ok) {
+          // Fetch the updated user data after a successful update
+          const fetchDataResponse = await fetch(
+            `http://localhost:3000/users/${userId}`,
+          )
+
+          if (fetchDataResponse.ok) {
+            const updatedUser = await fetchDataResponse.json()
+            setTodoList(updatedUser.todos || [])
+            setTaskName('')
+            setTaskDesc('')
+          } else {
+            console.error('Error fetching updated user data from API')
+          }
+        } else {
+          console.error('Error updating user data in API')
+        }
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
