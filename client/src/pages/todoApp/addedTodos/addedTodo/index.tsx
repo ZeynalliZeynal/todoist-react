@@ -2,13 +2,17 @@ import { TodoType } from '../index.tsx'
 
 type todoType = {
   todo: TodoType
+  onCheck: (id: string) => void
 }
 
-export default function AddedTodo({ todo }: todoType) {
+export default function AddedTodo({ onCheck, todo }: todoType) {
   return (
     <li className="flex items-start gap-1 w-full cursor-pointer border-b border-gray-300 py-4">
       <div className="w-6">
-        <button className="mx-auto group size-[18px] rounded-full text-gray-400 border border-gray-400 active:scale-90">
+        <button
+          onClick={() => onCheck(todo.id)}
+          className="mx-auto group size-[18px] rounded-full text-gray-400 border border-gray-400 active:scale-90"
+        >
           <svg
             width="24"
             height="24"
@@ -26,9 +30,7 @@ export default function AddedTodo({ todo }: todoType) {
       </div>
       <div className="flex-1">
         <div className="todo-name text-gray-900 text-[14px]">{todo.name}</div>
-        <div className="todo-desc text-gray-600 text-[12px]">
-          {todo.description}
-        </div>
+        <div className="todo-desc text-gray-600 text-[12px]">{todo.desc}</div>
       </div>
     </li>
   )
